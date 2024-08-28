@@ -1,8 +1,22 @@
-# MinhaGab API
 
-O MinhaGab é um gerenciador de documentos chamados GABs, que são basicamente guias laboratoriais emitidos de uma clínica para um cliente/paciente.
+---
 
-Este é o projeto de uma API REST desenvolvida com Spring Boot, Java 17 e Maven. A API está conectada a um banco de dados MySQL e utiliza as principais dependências necessárias para o desenvolvimento de uma aplicação robusta e segura.
+# MinhaGab
+
+O **MinhaGab** é um gerenciador de documentos chamados GABs, que são basicamente guias laboratoriais emitidos de uma clínica para um cliente/paciente. Este projeto é uma API REST desenvolvida com Spring Boot, Java 17 e Maven, conectada a um banco de dados MySQL.
+
+## Índice
+
+- [Descrição do Projeto](#descrição-do-projeto)
+- [Configurações do Projeto](#configurações-do-projeto)
+- [Dependências](#dependências)
+- [Instalação e Configuração](#instalação-e-configuração)
+- [Casos de Uso](#casos-de-uso)
+- [Endpoints da API](#endpoints-da-api)
+
+## Descrição do Projeto
+
+O **MinhaGab** foi desenvolvido para facilitar a gestão de documentos clínicos, permitindo registrar e consultar GABs (guias laboratoriais). O sistema oferece funcionalidades para cadastro, visualização e gerenciamento de GABs de maneira segura e eficiente.
 
 ## Configurações do Projeto
 
@@ -13,16 +27,16 @@ Este é o projeto de uma API REST desenvolvida com Spring Boot, Java 17 e Maven.
 
 ## Dependências
 
-As principais dependências utilizadas neste projeto são:
+O projeto utiliza as seguintes dependências:
 
-- **Spring Web**
-- **Spring Security**
-- **Lombok**
-- **MySQL Driver**
-- **Spring Data JPA**
-- **Spring Boot DevTools**
+- **Spring Boot**: Framework para construção da aplicação.
+- **Spring Security**: Para segurança da aplicação.
+- **Spring Data JPA**: Para acesso ao banco de dados.
+- **Lombok**: Biblioteca para reduzir a verbosidade do código Java.
+- **MySQL Driver**: Conector para o banco de dados MySQL.
+- **Spring Boot DevTools**: Ferramenta para facilitar o desenvolvimento.
 
-Aqui estão as configurações das dependências necessárias no arquivo `pom.xml`:
+**Exemplo de dependências Maven:**
 
 ```xml
 <dependencies>
@@ -66,68 +80,65 @@ Aqui estão as configurações das dependências necessárias no arquivo `pom.xm
         <optional>true</optional>
     </dependency>
 </dependencies>
-
-```
-## Configuração de Conexão com o Banco de Dados
-
-As configurações para conectar a API ao banco de dados MySQL estão definidas em `application.properties` da seguinte forma:
-
-```properties
-spring.application.name=MinhaGab
-
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.url=jdbc:mysql://localhost:3306/BancoGAB?createDatabaseIfNotExist=true
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.username=root
-spring.datasource.password=
-
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
-spring.jpa.show-sql=true
 ```
 
 ## Instalação e Configuração
 
 Siga os passos abaixo para configurar o projeto localmente:
 
-1. **Clone o Repositório**
+### Clone o Repositório
 
-   ```bash
-   git clone https://github.com/Samuel-Mil/minha-gab-back
-   ```
+```bash
+git clone https://github.com/Samuel-Mil/minha-gab-back
+```
 
-2. **Instale as Dependências**
+### Instale as Dependências
 
-   Execute o comando abaixo para instalar as dependências necessárias:
+Execute o comando abaixo para instalar as dependências necessárias:
 
-   ```bash
-   mvn clean install
-   ```
+```bash
+mvn clean install
+```
 
-3. **Configure o Banco de Dados**
+### Configure o Banco de Dados
 
-   Certifique-se de que você tenha um servidor MySQL rodando localmente e crie um banco de dados com o nome `BancoGAB`. As credenciais do banco de dados devem estar configuradas no arquivo `application.properties`.
+Certifique-se de que você tenha um servidor MySQL rodando localmente e crie um banco de dados com o nome `BancoGAB`. As credenciais do banco de dados devem estar configuradas no arquivo `application.properties`:
 
-4. **Execute a Aplicação**
+```properties
+spring.application.name=MinhaGab
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://localhost:3306/BancoGAB?createDatabaseIfNotExist=true
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.show-sql=true
+```
 
-   Para rodar a aplicação, utilize o comando:
+### Execute a Aplicação
 
-   ```bash
-   mvn spring-boot:run
-   ```
+Para rodar a aplicação, utilize o comando:
 
-5. **Acesse a Aplicação**
+```bash
+mvn spring-boot:run
+```
 
-   A aplicação estará disponível no seguinte endereço:
+### Acesse a Aplicação
 
-   ```
-   http://localhost:8080
-   ```
+A aplicação estará disponível no seguinte endereço:
 
-## Links Úteis
+```
+http://localhost:8080
+```
 
-- [Documentação do Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
-- [Documentação do Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
-- [Documentação do Spring Security](https://docs.spring.io/spring-security/site/docs/current/reference/html5/)
+### Links Úteis
+
+- [Documentação do Spring Boot](https://spring.io/projects/spring-boot)
+- [Documentação do Spring Data JPA](https://spring.io/projects/spring-data-jpa)
+- [Documentação do Spring Security](https://spring.io/projects/spring-security)
 - [Documentação do Lombok](https://projectlombok.org/)
 - [Documentação do MySQL Connector](https://dev.mysql.com/doc/connector-j/8.0/en/)
-```
+
+
+---
+
