@@ -12,7 +12,6 @@ O **MinhaGab** é um gerenciador de documentos chamados GABs, que são basicamen
 - [Dependências](#dependências)
 - [Instalação e Configuração](#instalação-e-configuração)
 
-
 ## Descrição do Projeto
 
 O **MinhaGab** foi desenvolvido para facilitar a gestão de documentos clínicos, permitindo registrar e consultar GABs (guias laboratoriais). O sistema oferece funcionalidades para cadastro, visualização e gerenciamento de GABs de maneira segura e eficiente.
@@ -34,6 +33,7 @@ O projeto utiliza as seguintes dependências:
 - **Lombok**: Biblioteca para reduzir a verbosidade do código Java.
 - **MySQL Driver**: Conector para o banco de dados MySQL.
 - **Spring Boot DevTools**: Ferramenta para facilitar o desenvolvimento.
+- **JWT**: Para gerar e validar tokens JWT.
 
 **Exemplo de dependências Maven:**
 
@@ -78,6 +78,13 @@ O projeto utiliza as seguintes dependências:
         <artifactId>spring-boot-devtools</artifactId>
         <optional>true</optional>
     </dependency>
+
+    <!-- JWT -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>0.9.1</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -98,6 +105,7 @@ Execute o comando abaixo para instalar as dependências necessárias:
 ```bash
 mvn clean install
 ```
+
 
 ### Configure o Banco de Dados
 
@@ -132,12 +140,22 @@ http://localhost:8080
 
 ### Links Úteis
 
+- [Baixar Java JDK](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html)
 - [Documentação do Spring Boot](https://spring.io/projects/spring-boot)
 - [Documentação do Spring Data JPA](https://spring.io/projects/spring-data-jpa)
 - [Documentação do Spring Security](https://spring.io/projects/spring-security)
 - [Documentação do Lombok](https://projectlombok.org/)
 - [Documentação do MySQL Connector](https://dev.mysql.com/doc/connector-j/8.0/en/)
+- [Documentação do JWT](https://github.com/jwtk/jjwt)
 
+### Verifique a Instalação do Java
+
+Após instalar o Java, verifique se ele foi instalado corretamente executando o seguinte comando no terminal:
+
+```bash
+java -version
+```
+
+Este comando deve exibir a versão do Java instalada.
 
 ---
-
