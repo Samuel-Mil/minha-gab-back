@@ -11,8 +11,7 @@ O **MinhaGab** é um gerenciador de documentos chamados GABs, que são basicamen
 - [Configurações do Projeto](#configurações-do-projeto)
 - [Dependências](#dependências)
 - [Instalação e Configuração](#instalação-e-configuração)
-- [Casos de Uso](#casos-de-uso)
-- [Endpoints da API](#endpoints-da-api)
+
 
 ## Descrição do Projeto
 
