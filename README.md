@@ -1,4 +1,3 @@
-```markdown
 # MinhaGab API
 
 O MinhaGab é um gerenciador de documentos chamados GABs, que são basicamente guias laboratoriais emitidos de uma clínica para um cliente/paciente.
@@ -67,8 +66,8 @@ Aqui estão as configurações das dependências necessárias no arquivo `pom.xm
         <optional>true</optional>
     </dependency>
 </dependencies>
-```
 
+```
 ## Configuração de Conexão com o Banco de Dados
 
 As configurações para conectar a API ao banco de dados MySQL estão definidas em `application.properties` da seguinte forma:
