@@ -80,10 +80,10 @@ O projeto utiliza as seguintes dependências:
     </dependency>
 
     <!-- JWT -->
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt</artifactId>
-        <version>0.9.1</version>
+	<dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+        <version>4.4.0</version>
     </dependency>
 </dependencies>
 ```

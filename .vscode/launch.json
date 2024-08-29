@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MinhaGabApplication<MinhaGab>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "backendminhagab.example.MinhaGab.MinhaGabApplication",
+            "projectName": "MinhaGab",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
