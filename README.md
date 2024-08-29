@@ -146,7 +146,7 @@ http://localhost:8080
 - [Documentação do Spring Security](https://spring.io/projects/spring-security)
 - [Documentação do Lombok](https://projectlombok.org/)
 - [Documentação do MySQL Connector](https://dev.mysql.com/doc/connector-j/8.0/en/)
-- [Documentação do JWT](https://github.com/jwtk/jjwt)
+- [Documentação do JWT](https://medium.com/@hemangdtu/mastering-json-web-tokens-jwt-a-comprehensive-guide-9a596c93e982)
 
 ### Verifique a Instalação do Java
 
