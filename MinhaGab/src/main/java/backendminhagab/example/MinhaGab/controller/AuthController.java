@@ -1,63 +1,57 @@
 package backendminhagab.example.MinhaGab.controller;
 
-
-import java.util.Optional;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import backendminhagab.example.MinhaGab.dto.LoginRequestDTO;
 import backendminhagab.example.MinhaGab.dto.RegisterRequestDTO;
-import backendminhagab.example.MinhaGab.dto.ResponseDTO;
 import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.repositories.UserRepository;
 import backendminhagab.example.MinhaGab.security.TokenService;
-import lombok.RequiredArgsConstructor;
+import backendminhagab.example.MinhaGab.Enums.Role;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository repository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    private final TokenService tokenService;
+    @Autowired
+    private TokenService tokenService;
 
-    @SuppressWarnings("rawtypes")
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDTO body){
-        UserModel user = this.repository.findByEmail(body.email()).orElseThrow(()-> new RuntimeException("User Not Found"));
-        if (passwordEncoder.matches(body.password() ,user.getPassword())){
-            String token = this.tokenService.generateToken(user);
-            return ResponseEntity.ok(new ResponseDTO(user.getName(), token));
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
-    @SuppressWarnings("rawtypes")
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequestDTO body){
-        Optional<UserModel> user = this.repository.findByEmail(body.email());
-        if (user.isEmpty()) {
-            UserModel newUser = new UserModel(); 
-            newUser.setPassword(passwordEncoder.encode(body.password()));
-            newUser.setEmail(body.email());
-            newUser.setName(body.name());
-            this.repository.save(newUser);
+    public String register(@RequestBody RegisterRequestDTO registerDTO) {
+        UserModel user = new UserModel();
+        user.setName(registerDTO.getName());
+        user.setCpf(registerDTO.getCpf());
+        user.setEmail(registerDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        user.setRole(Role.valueOf(registerDTO.getRole().toUpperCase()));
 
-            String token = this.tokenService.generateToken(newUser);
-            return ResponseEntity.ok(new ResponseDTO(newUser.getName(), token));
-            
-        }
-
-        return ResponseEntity.badRequest().build();
+        userRepository.save(user);
+        return "Usuário registrado com sucesso!";
     }
 
-    /*nome cpf email senha  */
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequestDTO loginDTO) {
+        UserModel user = userRepository.findByCpf(loginDTO.getCpf())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        if (!user.getRole().name().equalsIgnoreCase(loginDTO.getRole())) {
+            return "Role mismatch!";
+        }
+
+        String token = tokenService.generateToken(user);
+
+        return "Bearer " + token;
+    }
 }

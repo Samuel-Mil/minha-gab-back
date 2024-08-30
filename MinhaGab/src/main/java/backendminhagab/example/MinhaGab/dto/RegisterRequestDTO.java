@@ -1,4 +1,14 @@
 package backendminhagab.example.MinhaGab.dto;
 
-public record RegisterRequestDTO(String name, String email, String password) {
-} 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class RegisterRequestDTO {
+    private String name;
+    private String cpf; 
+    private String email;
+    private String password;
+    private String role; 
+}
