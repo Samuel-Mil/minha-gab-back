@@ -1,4 +1,4 @@
-package backendminhagab.example.MinhaGab.security;
+ package backendminhagab.example.MinhaGab.security;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -35,6 +35,10 @@ public class TokenService {
     }
 
     public String validateToken(String token){
+        if (token == null || token.isEmpty()) {
+            return null;
+            
+        }
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
@@ -42,7 +46,7 @@ public class TokenService {
                 .build()
                 .verify(token)
                 .getSubject();
-        } catch (Exception e) {
+        } catch (JWTCreationException exception) {
             return null;
         }
     }

@@ -15,12 +15,10 @@ import backendminhagab.example.MinhaGab.repositories.UserRepository;
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
-    
+    private UserRepository repository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel user = this.userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-
+    public UserDetails loadUserByUsername(String cpf) throws UsernameNotFoundException {
+        UserModel user = this.repository.findByCpf(cpf).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
 

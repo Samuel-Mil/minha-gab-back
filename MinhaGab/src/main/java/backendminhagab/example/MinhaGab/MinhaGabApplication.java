@@ -10,4 +10,5 @@ public class MinhaGabApplication {
 		SpringApplication.run(MinhaGabApplication.class, args);
 	}
 
+
 }
