@@ -80,10 +80,10 @@ O projeto utiliza as seguintes dependências:
     </dependency>
 
     <!-- JWT -->
-	<dependency>
-        <groupId>com.auth0</groupId>
-        <artifactId>java-jwt</artifactId>
-        <version>4.4.0</version>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>0.9.1</version>
     </dependency>
 </dependencies>
 ```
@@ -146,7 +146,7 @@ http://localhost:8080
 - [Documentação do Spring Security](https://spring.io/projects/spring-security)
 - [Documentação do Lombok](https://projectlombok.org/)
 - [Documentação do MySQL Connector](https://dev.mysql.com/doc/connector-j/8.0/en/)
-- [Documentação do JWT](https://medium.com/@hemangdtu/mastering-json-web-tokens-jwt-a-comprehensive-guide-9a596c93e982)
+- [Documentação do JWT](https://github.com/jwtk/jjwt)
 
 ### Verifique a Instalação do Java
 
