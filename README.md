@@ -34,15 +34,17 @@ O projeto utiliza as seguintes dependências:
 - **MySQL Driver**: Conector para o banco de dados MySQL.
 - **Spring Boot DevTools**: Ferramenta para facilitar o desenvolvimento.
 - **JWT**: Para gerar e validar tokens JWT.
+- **Hibernate Validator**: Para validação de dados.
+- **SLF4J**: Para logging.
 
 **Exemplo de dependências Maven:**
 
 ```xml
 <dependencies>
-    <!-- Spring Boot Starter Web -->
+    <!-- Spring Boot Starter Data JPA -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
     <!-- Spring Boot Starter Security -->
@@ -51,39 +53,82 @@ O projeto utiliza as seguintes dependências:
         <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
-    <!-- Lombok -->
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.24</version>
-        <scope>provided</scope>
-    </dependency>
-
-    <!-- MySQL Driver -->
-    <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>8.0.29</version>
-    </dependency>
-
-    <!-- Spring Data JPA -->
+    <!-- Spring Boot Starter Web -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
+        <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
     <!-- Spring Boot DevTools -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-devtools</artifactId>
+        <scope>runtime</scope>
         <optional>true</optional>
+    </dependency>
+
+    <!-- MySQL Driver -->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.31</version>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.24</version>
+        <optional>true</optional>
+    </dependency>
+
+    <!-- Spring Boot Starter Test -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Spring Security Test -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-test</artifactId>
+        <scope>test</scope>
     </dependency>
 
     <!-- JWT -->
     <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt</artifactId>
-        <version>0.9.1</version>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+        <version>4.4.0</version>
+    </dependency>
+
+    <!-- Hibernate Validator -->
+    <dependency>
+        <groupId>org.hibernate.validator</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>8.0.1.Final</version>
+    </dependency>
+
+    <!-- Validation API -->
+    <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>2.0.1.Final</version>
+    </dependency>
+
+    <!-- SLF4J API -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>2.0.0</version>
+    </dependency>
+
+    <!-- SLF4J Simple -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>2.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -105,7 +150,6 @@ Execute o comando abaixo para instalar as dependências necessárias:
 ```bash
 mvn clean install
 ```
-
 
 ### Configure o Banco de Dados
 
@@ -159,3 +203,4 @@ java -version
 Este comando deve exibir a versão do Java instalada.
 
 ---
+
