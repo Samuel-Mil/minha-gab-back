@@ -1,10 +1,10 @@
 package backendminhagab.example.MinhaGab.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,14 +16,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig { 
+public class SecurityConfig {
 
-    @SuppressWarnings("unused")
-    @Autowired
-    private CustomUserDetailService userDetailsService;
+    private final CustomUserDetailService userDetailsService;
+    private final SecurityFilter securityFilter;
 
-    @Autowired
-    SecurityFilter securityFilter;
+    public SecurityConfig(CustomUserDetailService userDetailsService, SecurityFilter securityFilter) {
+        this.userDetailsService = userDetailsService;
+        this.securityFilter = securityFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,6 +34,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers("/admin/**").hasRole("FINANCEIRO")
+                        .requestMatchers("/clinica/**").hasRole("CLINICA")
+                        .requestMatchers("/paciente/**").hasRole("PACIENTE")
+                        .requestMatchers(HttpMethod.GET, "/todoscomentarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/criarcomentarios").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

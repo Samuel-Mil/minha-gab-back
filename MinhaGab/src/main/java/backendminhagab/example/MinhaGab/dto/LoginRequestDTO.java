@@ -1,5 +1,12 @@
 package backendminhagab.example.MinhaGab.dto;
 
-public record LoginRequestDTO(String email, String password) {
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+public class LoginRequestDTO {
+    private String cpf; 
+    private String password;
+    private String role; 
 }
