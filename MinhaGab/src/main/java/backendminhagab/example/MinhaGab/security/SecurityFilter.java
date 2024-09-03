@@ -1,7 +1,7 @@
 package backendminhagab.example.MinhaGab.security;
 
 import java.io.IOException;
-import java.util.Optional;
+// import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import backendminhagab.example.MinhaGab.models.UserModel;
+// import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,6 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
 
+    @SuppressWarnings("unused")
     @Autowired
     private UserRepository userRepository;
 
@@ -35,19 +36,19 @@ public class SecurityFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String token = recoverToken(request);
         if (token != null) {
-            String cpf = tokenService.validateToken(token, false);  // Passar apenas um parâmetro se validateToken aceitar apenas um
+            String cpf = tokenService.validateToken(token, false); // Passa false para acesso
+
             if (cpf != null) {
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(cpf);
                     if (userDetails != null) {
                         var authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                        );
+                                userDetails, null, userDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         logger.info("Usuário autenticado com sucesso: {}", cpf);
                     } else {

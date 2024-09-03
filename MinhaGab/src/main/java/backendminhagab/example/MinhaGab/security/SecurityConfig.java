@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +21,7 @@ public class SecurityConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
+    @SuppressWarnings("unused")
     private final CustomUserDetailService userDetailsService;
     private final SecurityFilter securityFilter;
 
@@ -42,13 +42,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("FINANCEIRO")
                         .requestMatchers("/clinica/**").hasRole("CLINICA")
-                        .requestMatchers(HttpMethod.GET, "/todoscomentarios").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.POST, "/criarcomentarios").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.POST, "/todoscomentarios").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.POST, "/comentario/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.POST, "/mudarcomentario/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.POST, "/deletarcomentario/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.GET, "/comentarios/todos").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.POST, "/comentarios/criar").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.GET, "/comentarios/usuario/{userId}").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.GET, "/comentarios/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.PUT, "/comentarios/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.DELETE, "/comentarios/deletar/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
@@ -70,4 +69,3 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
-

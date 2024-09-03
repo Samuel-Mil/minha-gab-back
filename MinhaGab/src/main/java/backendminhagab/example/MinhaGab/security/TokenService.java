@@ -3,18 +3,17 @@ package backendminhagab.example.MinhaGab.security;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTCreationException;
-
 import backendminhagab.example.MinhaGab.models.UserModel;
+import backendminhagab.example.MinhaGab.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +25,15 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    private final UserRepository userRepository;
+
+    public TokenService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public String generateToken(UserModel user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-
             return JWT.create()
                     .withIssuer("MinhaGab")
                     .withSubject(user.getCpf()) // Usando CPF como subject
@@ -43,7 +47,6 @@ public class TokenService {
     public String generateRefreshToken(UserModel user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-
             return JWT.create()
                     .withIssuer("MinhaGab")
                     .withSubject(user.getCpf()) // Usando CPF como subject
@@ -64,7 +67,7 @@ public class TokenService {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("MinhaGab")
                     .build();
-    
+
             DecodedJWT decodedJWT = verifier.verify(token);
             String subject = decodedJWT.getSubject();
             logger.info("Token verificado com sucesso, subject: {}", subject);
@@ -74,7 +77,11 @@ public class TokenService {
             return null;
         }
     }
-    
+
+    @Transactional
+    public void updateRefreshToken(String cpf, String refreshToken) {
+        userRepository.updateRefreshToken(cpf, refreshToken);
+    }
 
     private Instant generateAccessExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.UTC); // Access token expira em 2 horas

@@ -72,6 +72,8 @@ public class AuthController {
 
         String accessToken = tokenService.generateToken(user);
         String refreshToken = tokenService.generateRefreshToken(user);
+        user.setRefreshToken(refreshToken); // Atualiza o refresh token no banco de dados
+        userRepository.save(user);
 
         TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken, "Login bem-sucedido");
         return ResponseEntity.ok(tokenResponse);
@@ -88,6 +90,7 @@ public class AuthController {
                 UserModel user = optionalUser.get();
                 String newAccessToken = tokenService.generateToken(user);
                 String newRefreshToken = tokenService.generateRefreshToken(user);
+                tokenService.updateRefreshToken(cpf, newRefreshToken); // Atualiza o refresh token
                 TokenResponse tokenResponse = new TokenResponse(newAccessToken, newRefreshToken, "Refresh bem-sucedido");
                 return ResponseEntity.ok(tokenResponse);
             }
