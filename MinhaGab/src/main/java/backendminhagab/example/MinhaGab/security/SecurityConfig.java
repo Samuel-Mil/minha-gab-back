@@ -13,10 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final CustomUserDetailService userDetailsService;
     private final SecurityFilter securityFilter;
@@ -28,6 +32,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        logger.info("Configuring security filter chain");
+
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -36,22 +42,28 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("FINANCEIRO")
                         .requestMatchers("/clinica/**").hasRole("CLINICA")
-                        .requestMatchers("/paciente/**").hasRole("PACIENTE")
-                        .requestMatchers(HttpMethod.GET, "/todoscomentarios").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/criarcomentarios").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/todoscomentarios").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.POST, "/criarcomentarios").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.GET, "/comentarios/usuario/{userId}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
+        logger.info("Security filter chain configured");
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        logger.info("Creating PasswordEncoder bean");
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        logger.info("Creating AuthenticationManager bean");
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
+

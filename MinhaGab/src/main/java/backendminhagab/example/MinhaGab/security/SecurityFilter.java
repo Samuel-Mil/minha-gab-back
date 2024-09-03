@@ -1,12 +1,13 @@
 package backendminhagab.example.MinhaGab.security;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,39 +17,60 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    TokenService tokenService;
+    private static final Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
 
     @Autowired
-    UserRepository userRepository;
+    private TokenService tokenService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+            throws ServletException, IOException {
+
         String token = recoverToken(request);
         if (token != null) {
-            String cpf = tokenService.validateToken(token);
+            String cpf = tokenService.validateToken(token, false);  // Passar apenas um parâmetro se validateToken aceitar apenas um
             if (cpf != null) {
-                Optional<UserModel> optionalUser = userRepository.findByCpf(cpf);
-                if (optionalUser.isPresent()) {
-                    UserModel user = optionalUser.get();
-                    // Set authorities based on user role
-                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(cpf);
+                    if (userDetails != null) {
+                        var authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                        );
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        logger.info("Usuário autenticado com sucesso: {}", cpf);
+                    } else {
+                        logger.warn("Usuário não encontrado: {}", cpf);
+                    }
                 }
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token inválido ou expirado");
+                logger.warn("Token inválido ou expirado");
+                return;
             }
         }
+
         filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
+        // Lógica para recuperar o token do cabeçalho da solicitação
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7); // Remove "Bearer " do início
         }
-        return authHeader.substring(7); // Remove "Bearer " prefix
+        return null;
     }
 }

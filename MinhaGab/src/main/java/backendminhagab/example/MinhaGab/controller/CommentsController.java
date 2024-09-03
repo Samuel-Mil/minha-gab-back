@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import backendminhagab.example.MinhaGab.models.Comments;
+import backendminhagab.example.MinhaGab.models.Comentarios;
 import backendminhagab.example.MinhaGab.services.CommentService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -26,35 +26,44 @@ public class CommentsController {
 
     // método para criar comentário
     @PostMapping("/criarcomentarios")
-    public ResponseEntity<Comments> createComment(@RequestBody Comments comments) {
-        Comments savedComments = commentService.saveComment(comments);
+    public ResponseEntity<Comentarios> createComment(@RequestBody Comentarios comments) {
+        Comentarios savedComments = commentService.saveComment(comments);
         return new ResponseEntity<>(savedComments, HttpStatus.CREATED);
     }
 
     // buscar todos os comentários
     @GetMapping("/todoscomentarios")
-    public List<Comments> getAllComments() {
+    public List<Comentarios> getAllComments() {
         return commentService.getAllComments();
     }
 
     // buscar comentário por ID
     @GetMapping("/comentario/{id}")
-    public ResponseEntity<Comments> getCommentById(@PathVariable Long id) {
+    public ResponseEntity<Comentarios> getCommentById(@PathVariable Long id) {
         return commentService.getCommentById(id).map(comments -> new ResponseEntity<>(comments, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // método para atualizar (update) comentário
     @PutMapping("/mudarcomentario/{id}")
-    public ResponseEntity<Comments> updEntity(@PathVariable Long id, @RequestBody Comments comments) {
+    public ResponseEntity<Comentarios> updEntity(@PathVariable Long id, @RequestBody Comentarios comments) {
         return new ResponseEntity<>(commentService.updComments(id, comments), HttpStatus.OK);
     }
 
     // método para deletar comentário por ID
     @DeleteMapping("/deletarcomentario/{id}")
-    public ResponseEntity<Comments> dEntity(@PathVariable Long id) {
+    public ResponseEntity<Comentarios> dEntity(@PathVariable Long id) {
         commentService.deleteComment(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/comentarios/usuario/{userId}")
+    public ResponseEntity<List<Comentarios>> getCommentsByUserId(@PathVariable Long userId) {
+        List<Comentarios> comments = commentService.getCommentsByUserId(userId);
+        if (comments.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
 }
