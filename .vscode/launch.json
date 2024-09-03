@@ -2,12 +2,15 @@
     "configurations": [
         {
             "type": "java",
+<<<<<<< HEAD
             "name": "MinhaGabApplication",
             "request": "launch",
             "mainClass": "backendminhagab.example.MinhaGab.MinhaGabApplication"
         },
         {
             "type": "java",
+=======
+>>>>>>> bdc10c4a272122b465bb6d3121bcd7d6b29c3e7e
             "name": "Spring Boot-MinhaGabApplication<MinhaGab>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
