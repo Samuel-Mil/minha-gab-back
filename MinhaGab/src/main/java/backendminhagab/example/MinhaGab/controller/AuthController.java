@@ -47,6 +47,8 @@ public class AuthController {
         UserModel user = new UserModel();
         user.setName(registerDTO.getName());
         user.setCpf(registerDTO.getCpf());
+        user.setCnpj(registerDTO.getCnpj());
+        user.setPhone(registerDTO.getPhone());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setRole(role);

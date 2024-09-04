@@ -14,6 +14,12 @@ public class RegisterRequestDTO {
 
     @NotBlank(message = "CPF é obrigatório")
     private String cpf;
+    
+    @NotBlank(message = "CNPJ é obrigatório")
+    private String cnpj;
+
+    @NotBlank(message = "Telefone é obrigatório")
+    private String phone;
 
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email deve ser válido")
