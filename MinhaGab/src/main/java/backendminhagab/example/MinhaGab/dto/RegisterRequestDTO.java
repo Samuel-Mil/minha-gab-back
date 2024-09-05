@@ -13,9 +13,11 @@ public class RegisterRequestDTO {
     private String name;
 
     @NotBlank(message = "CPF é obrigatório")
+    @Size(min = 11, message = "CPF deve ter no mínimo 11 caracteres")
     private String cpf;
     
     @NotBlank(message = "CNPJ é obrigatório")
+    @Size(min = 14, message = "CNPJ deve ter no mínimo 14 caracteres")
     private String cnpj;
 
     @NotBlank(message = "Telefone é obrigatório")
