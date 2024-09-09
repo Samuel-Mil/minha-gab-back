@@ -31,7 +31,7 @@ public class Comentarios {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserModel user;
 
-    private String comentarios; // Ajuste para o nome do campo de comentário
+    private String comentarios; 
 
     @Enumerated(EnumType.STRING)
     private StatusComment status;
