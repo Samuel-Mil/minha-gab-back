@@ -32,9 +32,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO registerDTO) {
-        if (userRepository.findByCpf(registerDTO.getCpf()).isPresent()
+        if (userRepository.findByCpfcnpj(registerDTO.getCpfcnpj()).isPresent()
                 || userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Usuário já existe com este CPF ou e-mail");
+            return ResponseEntity.badRequest().body("Usuário já existe com este CPF/CNPJ ou e-mail");
         }
 
         Role role;
@@ -46,7 +46,8 @@ public class AuthController {
 
         UserModel user = new UserModel();
         user.setName(registerDTO.getName());
-        user.setCpf(registerDTO.getCpf());
+        user.setCpfcnpj(registerDTO.getCpfcnpj());
+        user.setPhone(registerDTO.getPhone());
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setRole(role);
@@ -57,7 +58,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequestDTO loginDTO) {
-        UserModel user = userRepository.findByCpf(loginDTO.getCpf())
+        UserModel user = userRepository.findByCpfcnpj(loginDTO.getCpfcnpj())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
@@ -85,7 +86,7 @@ public class AuthController {
         String cpf = tokenService.validateToken(refreshToken, true);
 
         if (cpf != null) {
-            Optional<UserModel> optionalUser = userRepository.findByCpf(cpf);
+            Optional<UserModel> optionalUser = userRepository.findByCpfcnpj(cpf);
             if (optionalUser.isPresent()) {
                 UserModel user = optionalUser.get();
                 String newAccessToken = tokenService.generateToken(user);

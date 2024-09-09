@@ -22,16 +22,16 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String cpf) throws UsernameNotFoundException {
-        logger.debug("Tentando carregar usuário com CPF: {}", cpf);
+    public UserDetails loadUserByUsername(String cpfcnpj) throws UsernameNotFoundException {
+        logger.debug("Tentando carregar usuário com CPF: {}", cpfcnpj);
         
-        UserModel user = repository.findByCpf(cpf)
+        UserModel user = repository.findByCpfcnpj(cpfcnpj)
             .orElseThrow(() -> {
-                logger.warn("Usuário não encontrado com CPF: {}", cpf);
-                return new UsernameNotFoundException("Usuário não encontrado com CPF: " + cpf);
+                logger.warn("Usuário não encontrado com CPF: {}", cpfcnpj);
+                return new UsernameNotFoundException("Usuário não encontrado com CPF: " + cpfcnpj);
             });
 
-        logger.debug("Usuário encontrado: {}", user.getCpf());
+        logger.debug("Usuário encontrado: {}", user.getCpfcnpj());
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 }

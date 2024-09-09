@@ -36,7 +36,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("MinhaGab")
-                    .withSubject(user.getCpf()) // Usando CPF como subject
+                    .withSubject(user.getCpfcnpj()) // Usando CPF como subject
                     .withExpiresAt(generateAccessExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e) {
@@ -49,7 +49,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("MinhaGab")
-                    .withSubject(user.getCpf()) // Usando CPF como subject
+                    .withSubject(user.getCpfcnpj()) // Usando CPF como subject
                     .withExpiresAt(generateRefreshExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e) {

@@ -41,18 +41,18 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String token = recoverToken(request);
         if (token != null) {
-            String cpf = tokenService.validateToken(token, false); // Passa false para acesso
+            String cpfcnpj = tokenService.validateToken(token, false); // Passa false para acesso
 
-            if (cpf != null) {
+            if (cpfcnpj != null) {
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(cpf);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(cpfcnpj);
                     if (userDetails != null) {
                         var authentication = new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                        logger.info("Usuário autenticado com sucesso: {}", cpf);
+                        logger.info("Usuário autenticado com sucesso: {}", cpfcnpj);
                     } else {
-                        logger.warn("Usuário não encontrado: {}", cpf);
+                        logger.warn("Usuário não encontrado: {}", cpfcnpj);
                     }
                 }
             } else {

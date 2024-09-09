@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class LoginRequestDTO {
-    private String cpf; 
+    private String cpfcnpj; 
     private String password;
     private String role; 
 }

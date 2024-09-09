@@ -3,7 +3,7 @@ package backendminhagab.example.MinhaGab.dto;
 import backendminhagab.example.MinhaGab.Enums.StatusComment;
 
 public class ComentariosRequestDTO {
-    private Integer userId;  // Alterado para Integer
+    private Integer userId;  
     private String comentario;
     private StatusComment status;
 

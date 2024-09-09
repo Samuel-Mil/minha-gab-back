@@ -12,13 +12,13 @@ import backendminhagab.example.MinhaGab.models.UserModel;
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
-    Optional<UserModel> findByCpf(String cpf);  
+    Optional<UserModel> findByCpfcnpj(String cpfcnpj);  
     
     Optional<UserModel> findByName(String name);
 
     Optional<UserModel> findByEmail(String email);
 
     @Modifying
-    @Query("UPDATE UserModel u SET u.refreshToken = :refreshToken WHERE u.cpf = :cpf")
+    @Query("UPDATE UserModel u SET u.refreshToken = :refreshToken WHERE u.cpfcnpj = :cpfcnpj")
     void updateRefreshToken(String cpf, String refreshToken);
 }

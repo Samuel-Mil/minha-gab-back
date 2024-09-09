@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import backendminhagab.example.MinhaGab.Enums.Role;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +38,11 @@ public class UserModel implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private String cpf; 
+    
+    @Column(unique=true, nullable= false)
+    private String cpfcnpj; 
+
+    private String phone;
     private String email;
     private String password;
     private String refreshToken;
@@ -48,6 +54,10 @@ public class UserModel implements UserDetails {
     @JsonIgnore
     private List<Comentarios> comentarios;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Gab gab;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == Role.FINANCEIRO) {
@@ -57,11 +67,10 @@ public class UserModel implements UserDetails {
         }
     }
 
-    
 
     @Override
     public String getUsername() {
-        return cpf; 
+        return cpfcnpj; 
     }
 
     @Override
