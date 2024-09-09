@@ -79,8 +79,8 @@ public class TokenService {
     }
 
     @Transactional
-    public void updateRefreshToken(String cpf, String refreshToken) {
-        userRepository.updateRefreshToken(cpf, refreshToken);
+    public void updateRefreshToken(String cpfcnpj, String refreshToken) {
+        userRepository.updateRefreshToken(cpfcnpj, refreshToken);
     }
 
     private Instant generateAccessExpirationDate() {
