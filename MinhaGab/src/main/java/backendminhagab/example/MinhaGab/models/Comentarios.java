@@ -1,5 +1,8 @@
 package backendminhagab.example.MinhaGab.models;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import backendminhagab.example.MinhaGab.Enums.StatusComment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
@@ -35,4 +39,7 @@ public class Comentarios {
 
     @Enumerated(EnumType.STRING)
     private StatusComment status;
+
+    @OneToOne(mappedBy = "comentarios", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Answer answer;
 }
