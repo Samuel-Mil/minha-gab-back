@@ -48,13 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/comentarios/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.PUT, "/comentarios/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.DELETE, "/comentarios/deletar/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
-
-                        .requestMatchers(HttpMethod.GET, "/respostas/todas").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.POST, "/respostas/criar").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.GET, "/respostas/usuario/{userId}").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.GET, "/respostas/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.PUT, "/respostas/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.DELETE, "/respostas/deletar/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.PUT, "/comentarios/responder").hasAnyRole("FINANCEIRO", "CLINICA")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

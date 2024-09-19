@@ -6,11 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import backendminhagab.example.MinhaGab.dto.ComentariosRequestDTO;
+import backendminhagab.example.MinhaGab.dto.RespostaRequestDTO;  
 import backendminhagab.example.MinhaGab.models.Comentarios;
+import backendminhagab.example.MinhaGab.models.RespostaComentario;
 import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.services.CommentService;
+import backendminhagab.example.MinhaGab.services.RespostaService;
 import backendminhagab.example.MinhaGab.services.UserService;
-import backendminhagab.example.MinhaGab.dto.ComentariosRequestDTO;  // Atualize a importação
 
 @RestController
 @RequestMapping("/comentarios")
@@ -18,10 +21,12 @@ public class CommentsController {
 
     private final CommentService commentService;
     private final UserService userService;
+    private final RespostaService respostaService;
 
-    public CommentsController(CommentService commentService, UserService userService) {
+    public CommentsController(CommentService commentService, UserService userService, RespostaService respostaService) {
         this.commentService = commentService;
         this.userService = userService;
+        this.respostaService = respostaService;
     }
 
     @PostMapping("/criar")
@@ -70,4 +75,18 @@ public class CommentsController {
         }
         return new ResponseEntity<>(comentarios, HttpStatus.OK);
     }
+
+  
+    @PostMapping("/responder")
+    public ResponseEntity<RespostaComentario> responderComentario(@RequestBody RespostaRequestDTO respostaRequestDTO) {
+       
+        Long comentarioId = respostaRequestDTO.getComentarioId();
+        String conteudoResposta = respostaRequestDTO.getResposta();
+
+      
+        RespostaComentario resposta = respostaService.adicionarResposta(comentarioId, conteudoResposta);
+
+        return new ResponseEntity<>(resposta, HttpStatus.CREATED);
+    }
+
 }

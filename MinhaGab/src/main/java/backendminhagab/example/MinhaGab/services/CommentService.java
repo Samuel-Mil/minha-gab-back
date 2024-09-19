@@ -10,7 +10,7 @@ import backendminhagab.example.MinhaGab.models.Comentarios;
 import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.repositories.CommentRepository;
 import backendminhagab.example.MinhaGab.repositories.UserRepository;
-import backendminhagab.example.MinhaGab.dto.ComentariosRequestDTO; // Certifique-se de que o DTO está importado
+import backendminhagab.example.MinhaGab.dto.ComentariosRequestDTO; 
 
 @Service
 public class CommentService {

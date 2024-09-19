@@ -7,12 +7,14 @@ import backendminhagab.example.MinhaGab.dto.TokenResponse;
 import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.repositories.UserRepository;
 import backendminhagab.example.MinhaGab.security.TokenService;
+import jakarta.validation.Valid;
 import backendminhagab.example.MinhaGab.Enums.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -56,8 +58,14 @@ public class AuthController {
         return ResponseEntity.ok("Usuário registrado com sucesso!");
     }
 
+    @SuppressWarnings("null")
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequestDTO loginDTO) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequestDTO loginDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest()
+                .body(new TokenResponse(null, null, result.getFieldError().getDefaultMessage()));
+        }
+
         UserModel user = userRepository.findByCpfcnpj(loginDTO.getCpfcnpj())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
