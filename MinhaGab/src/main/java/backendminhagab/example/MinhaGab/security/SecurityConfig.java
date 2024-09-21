@@ -14,6 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +26,6 @@ public class SecurityConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    @SuppressWarnings("unused")
     private final CustomUserDetailService userDetailsService;
     private final SecurityFilter securityFilter;
 
@@ -35,6 +39,8 @@ public class SecurityConfig {
         logger.info("Configuring security filter chain");
 
         http
+                .cors() // Ativando o suporte a CORS
+                .and()
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
@@ -56,6 +62,20 @@ public class SecurityConfig {
         logger.info("Security filter chain configured");
 
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5173", "http://localhost:5173")); // Origens permitidas
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
+        config.setAllowedHeaders(Arrays.asList("*")); // Cabeçalhos permitidos
+        config.setAllowCredentials(true); // Permitir cookies
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config); // Aplicar CORS em todas as rotas
+
+        return new CorsFilter(source);
     }
 
     @Bean
