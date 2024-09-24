@@ -4,6 +4,8 @@ import backendminhagab.example.MinhaGab.dto.LoginRequestDTO;
 import backendminhagab.example.MinhaGab.dto.RegisterRequestDTO;
 import backendminhagab.example.MinhaGab.dto.RefreshRequest;
 import backendminhagab.example.MinhaGab.dto.TokenResponse;
+import backendminhagab.example.MinhaGab.exceptions.CampoObrigatorioException;
+import backendminhagab.example.MinhaGab.exceptions.UsuarioJaExisteException;
 import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.repositories.UserRepository;
 import backendminhagab.example.MinhaGab.security.TokenService;
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+import java.util.Map;
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -33,17 +38,29 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequestDTO registerDTO) {
-        if (userRepository.findByCpfcnpj(registerDTO.getCpfcnpj()).isPresent()
-                || userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Usuário já existe com este CPF/CNPJ ou e-mail");
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequestDTO registerDTO,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            // Retorna erros de validação em JSON
+            Map<String, String> erros = new HashMap<>();
+            result.getFieldErrors()
+                    .forEach(fieldError -> erros.put(fieldError.getField(), fieldError.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(erros);
+        }
+
+        if (userRepository.findByCpfcnpj(registerDTO.getCpfcnpj()).isPresent()) {
+            throw new UsuarioJaExisteException("Usuário já existe com este CPF/CNPJ");
+        }
+
+        if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
+            throw new UsuarioJaExisteException("Usuário já existe com este e-mail");
         }
 
         Role role;
         try {
             role = Role.valueOf(registerDTO.getRole().toUpperCase());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Role inválida");
+            throw new CampoObrigatorioException("Role inválida");
         }
 
         UserModel user = new UserModel();
@@ -55,7 +72,11 @@ public class AuthController {
         user.setRole(role);
 
         userRepository.save(user);
-        return ResponseEntity.ok("Usuário registrado com sucesso!");
+
+        // Retorna uma resposta de sucesso em JSON
+        Map<String, String> successResponse = new HashMap<>();
+        successResponse.put("mensagem", "Usuário registrado com sucesso!");
+        return ResponseEntity.ok(successResponse);
     }
 
     @SuppressWarnings("null")
@@ -63,7 +84,7 @@ public class AuthController {
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequestDTO loginDTO, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest()
-                .body(new TokenResponse(null, null, result.getFieldError().getDefaultMessage()));
+                    .body(new TokenResponse(null, null, result.getFieldError().getDefaultMessage()));
         }
 
         UserModel user = userRepository.findByCpfcnpj(loginDTO.getCpfcnpj())
@@ -100,7 +121,8 @@ public class AuthController {
                 String newAccessToken = tokenService.generateToken(user);
                 String newRefreshToken = tokenService.generateRefreshToken(user);
                 tokenService.updateRefreshToken(cpf, newRefreshToken); // Atualiza o refresh token
-                TokenResponse tokenResponse = new TokenResponse(newAccessToken, newRefreshToken, "Refresh bem-sucedido");
+                TokenResponse tokenResponse = new TokenResponse(newAccessToken, newRefreshToken,
+                        "Refresh bem-sucedido");
                 return ResponseEntity.ok(tokenResponse);
             }
         }

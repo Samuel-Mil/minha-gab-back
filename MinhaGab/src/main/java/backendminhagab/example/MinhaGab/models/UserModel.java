@@ -21,6 +21,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,9 @@ public class UserModel implements UserDetails {
     private String cpfcnpj; 
 
     private String phone;
+
+    @NotNull
+    @Email
     private String email;
     private String password;
     private String refreshToken;
