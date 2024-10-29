@@ -1,44 +1,53 @@
 package backendminhagab.example.MinhaGab.controller;
 
-import java.util.List;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import backendminhagab.example.MinhaGab.models.GabRequest;
+import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.services.GabRequestService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/gab_requests")
 public class GabRequestController {
 
-     private final GabRequestService gabRequestService;
+    private final GabRequestService gabRequestService;
 
-    public GabRequestController(GabRequestService gabsRequestService) {
-        this.gabRequestService = gabsRequestService;
+    public GabRequestController(GabRequestService gabRequestService) {
+        this.gabRequestService = gabRequestService;
     }
 
+    // Endpoint para criar uma nova GabRequest
     @PostMapping("/create")
-    public ResponseEntity<GabRequest> createGabsRequest(@RequestBody GabRequest gabRequest) {
-        GabRequest newRequest = gabRequestService.createGabsRequest(gabRequest);
-        return ResponseEntity.ok(newRequest);
+    public ResponseEntity<GabRequest> createGabRequest(@RequestBody GabRequest gabRequest) {
+        GabRequest savedRequest = gabRequestService.createGabRequest(gabRequest);
+        return ResponseEntity.ok(savedRequest); // Retorna a GabRequest salva
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteGabRequest(@PathVariable Integer id) {
-        gabRequestService.deletarGabRequest(id);
-        return ResponseEntity.noContent().build(); // HTTP 204 
+    // Endpoint para fazer upload de um PDF associado à GabRequest
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadGabRequest(
+            @RequestParam("userId") Integer userId, // ID do usuário
+            @RequestParam("pdf_file") MultipartFile file) {
+
+        // Verifica se o arquivo PDF foi enviado
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("O arquivo 'pdf_file' não foi enviado.");
+        }
+
+        // Cria uma nova GabRequest
+        GabRequest newRequest = new GabRequest();
+
+        // Atribui o usuário à GabRequest
+        UserModel user = new UserModel();
+        user.setId(userId); // Define o ID do usuário
+        newRequest.setUser(user); // Associa o usuário à GabRequest
+
+        // Salva a GabRequest e o arquivo PDF
+        GabRequest savedRequest = gabRequestService.createGabRequestWithFile(newRequest, file);
+        
+        return ResponseEntity.ok("GabRequest criada com sucesso: " + savedRequest.getId()); // Retorna confirmação com ID da GabRequest salva
     }
 
-    @GetMapping
-    public ResponseEntity<List<GabRequest>> getAllRequests() {
-        List<GabRequest> requests = gabRequestService.getAllRequests();
-        return ResponseEntity.ok(requests);
-    }
-
+    // Outros métodos existentes (por exemplo, para listar requisições, deletar, etc.)
 }

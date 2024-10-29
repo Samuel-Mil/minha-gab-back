@@ -32,25 +32,25 @@ public class Gab {
 
     @OneToOne
     @JoinColumn(name = "request_id", nullable = false) // Cada Gab deve ter uma GabRequest associada
-    private GabRequest gabRequest;
+    private GabRequest gabRequest; // Obrigatório
 
     @ManyToOne // Adiciona o relacionamento com User
     @JoinColumn(name = "user_id", nullable = false) // Nome da coluna que irá armazenar o ID do User
     private UserModel user; // Nome da variável que irá referenciar o User
 
     @Lob
-    @Column(name = "pdf_file", nullable = true)
+    @Column(name = "pdf_file", nullable = true) // PDF opcional
     private byte[] pdfFile;
     
     @Enumerated(EnumType.STRING) // se você estiver usando um Enum
-    private StatusGab status;
+    private StatusGab status; // Status do GAB, pode ser utilizado para controle de fluxo
 
-    @Column(name = "mensagem", columnDefinition = "TEXT", nullable = true)
+    @Column(name = "mensagem", columnDefinition = "TEXT", nullable = true) // Mensagem opcional
     private String mensagem;
 
     @Override
     public String toString() {
-        return "Gabs{" +
+        return "Gab{" +
                 "id=" + id +
                 ", gabRequest=" + gabRequest +
                 ", user=" + user + // Adiciona a informação do User ao toString

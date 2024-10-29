@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
+    @SuppressWarnings("unused")
     private final CustomUserDetailService userDetailsService;
     private final SecurityFilter securityFilter;
 
@@ -34,6 +35,7 @@ public class SecurityConfig {
         this.securityFilter = securityFilter;
     }
 
+    @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configuring security filter chain");
@@ -57,7 +59,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/comentarios/responder").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.GET, "/gab_requests").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.POST, "/gab_requests/create").hasAnyRole("FINANCEIRO", "CLINICA")
-                        .requestMatchers(HttpMethod.DELETE, "/gab_requests/delete/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.DELETE, "/gab_requests/upload").hasAnyRole("FINANCEIRO", "CLINICA")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

@@ -29,8 +29,8 @@ public class GabRequest {
 
     @ManyToOne // Relacionamento ManyToOne com UserModel
     @JoinColumn(name = "patient_id", nullable = false) // Não pode ser nulo
-    private UserModel user;
+    private UserModel user; // O usuário deve ser obrigatório
 
-    @OneToOne(mappedBy = "gabRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Gab gab; // Um GabRequest pode ter apenas um Gab associado
+    @OneToOne(mappedBy = "gabRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Gab gab; // Um GabRequest pode ter apenas um Gab associado, mas este pode ser nulo (opcional)
 }
