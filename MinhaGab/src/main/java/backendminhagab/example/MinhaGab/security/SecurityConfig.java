@@ -55,6 +55,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/comentarios/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.DELETE, "/comentarios/deletar/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .requestMatchers(HttpMethod.PUT, "/comentarios/responder").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.GET, "/gab_requests").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.POST, "/gab_requests/create").hasAnyRole("FINANCEIRO", "CLINICA")
+                        .requestMatchers(HttpMethod.DELETE, "/gab_requests/delete/{id}").hasAnyRole("FINANCEIRO", "CLINICA")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
