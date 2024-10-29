@@ -7,6 +7,9 @@ import backendminhagab.example.MinhaGab.repositories.GabRequestRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class GabRequestService {
 
     private final GabRequestRepository gabRequestRepository;
