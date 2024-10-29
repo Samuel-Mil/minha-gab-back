@@ -39,7 +39,7 @@ public class Gab {
     private UserModel user; // Nome da variável que irá referenciar o User
 
     @Lob
-    @Column(name = "pdf_file", nullable = true) // PDF opcional
+    @Column(name = "pdf_file", nullable = true, columnDefinition = "LONGBLOB") // PDF opcional
     private byte[] pdfFile;
     
     @Enumerated(EnumType.STRING) // se você estiver usando um Enum
