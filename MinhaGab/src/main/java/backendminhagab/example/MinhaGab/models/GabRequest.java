@@ -1,8 +1,5 @@
 package backendminhagab.example.MinhaGab.models;
 
-
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,7 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne; 
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,17 +20,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "gabs_requests") //se quiser botar em port
+@Table(name = "gabs_requests")
 public class GabRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JoinColumn(name = "patient_id")
+    @ManyToOne // Relacionamento ManyToOne com UserModel
+    @JoinColumn(name = "patient_id", nullable = false) // Não pode ser nulo
     private UserModel user;
 
-    @OneToMany(mappedBy = "gabRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Gab> listaGabs;
-    
+    @OneToOne(mappedBy = "gabRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Gab gab; // Um GabRequest pode ter apenas um Gab associado
 }

@@ -37,6 +37,7 @@ public class TratadorGlobalDeExcecoes extends ResponseEntityExceptionHandler {
     Esse método é chamado automaticamente quando algum argumento de uma requisição falha na validação
     Por exemplo, se um campo obrigatório não for fornecido ou se não respeitar as regras de validação definidas*/
      
+    @SuppressWarnings("null")
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,

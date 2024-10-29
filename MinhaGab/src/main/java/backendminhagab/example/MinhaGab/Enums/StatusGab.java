@@ -3,7 +3,7 @@ package backendminhagab.example.MinhaGab.Enums;
 public enum StatusGab {
     PENDENTE("pendente"),
     EMITIDA("emitida"),
-    ERRO("erro");
+    NEGADA("negada");
 
     private String statusGab;
 

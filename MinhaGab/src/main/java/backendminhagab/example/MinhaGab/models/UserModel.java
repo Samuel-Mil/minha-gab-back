@@ -1,5 +1,6 @@
 package backendminhagab.example.MinhaGab.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
@@ -39,17 +41,20 @@ public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    
-    @Column(unique=true, nullable= false)
-    private String cpfcnpj; 
 
+    private String name;
+
+    @Column(unique = true, nullable = false)
+    private String cpfcnpj; 
     private String phone;
 
     @NotNull
     @Email
     private String email;
+
+    @JsonIgnore // Para proteger a senha
     private String password;
+
     private String refreshToken;
 
     @Enumerated(EnumType.STRING)
@@ -57,7 +62,7 @@ public class UserModel implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Comentarios> comentarios;
+    private List<Comentarios> comentarios; 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -65,17 +70,17 @@ public class UserModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         if (this.role == Role.FINANCEIRO) {
-            return List.of(new SimpleGrantedAuthority("ROLE_FINANCEIRO"), new SimpleGrantedAuthority("ROLE_USER"));
-        } else {
-            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_FINANCEIRO"));
         }
+        return authorities;
     }
-
 
     @Override
     public String getUsername() {
-        return cpfcnpj; 
+        return cpfcnpj;
     }
 
     @Override

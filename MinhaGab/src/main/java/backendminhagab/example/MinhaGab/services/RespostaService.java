@@ -14,7 +14,6 @@ public class RespostaService {
     @Autowired
     private final CommentRepository commentRepository;
 
-    @Autowired
     public RespostaService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
