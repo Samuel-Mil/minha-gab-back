@@ -55,5 +55,4 @@ public class GabRequestController {
         }
     }
 
-    // Outros métodos, como listar, deletar, etc., podem ser adicionados aqui.
 }
