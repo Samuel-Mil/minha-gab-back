@@ -26,12 +26,9 @@ public class SecurityConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    @SuppressWarnings("unused")
-    private final CustomUserDetailService userDetailsService;
     private final SecurityFilter securityFilter;
 
-    public SecurityConfig(CustomUserDetailService userDetailsService, SecurityFilter securityFilter) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
     }
 
@@ -41,7 +38,7 @@ public class SecurityConfig {
         logger.info("Configuring security filter chain");
 
         http
-                .cors() // Ativando o suporte a CORS
+                .cors()
                 .and()
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -72,13 +69,13 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5173", "http://localhost:5173")); // Origens permitidas
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
-        config.setAllowedHeaders(Arrays.asList("*")); // Cabeçalhos permitidos
-        config.setAllowCredentials(true); // Permitir cookies
+        config.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5173", "http://localhost:5173"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // Aplicar CORS em todas as rotas
+        source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);
     }
