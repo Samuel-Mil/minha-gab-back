@@ -1,18 +1,7 @@
 package backendminhagab.example.MinhaGab.models;
 
 import backendminhagab.example.MinhaGab.Enums.StatusGab;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne; 
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,16 +23,16 @@ public class Gab {
     @JoinColumn(name = "request_id", nullable = false) // Cada Gab deve ter uma GabRequest associada
     private GabRequest gabRequest; // Obrigatório
 
-    @ManyToOne // Adiciona o relacionamento com User
-    @JoinColumn(name = "user_id", nullable = false) // Nome da coluna que irá armazenar o ID do User
-    private UserModel user; // Nome da variável que irá referenciar o User
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel user;
 
     @Lob
-    @Column(name = "pdf_file", nullable = true) // PDF opcional
+    @Column(name = "pdf_file", columnDefinition = "LONGBLOB", nullable = true) // PDF opcional
     private byte[] pdfFile;
-    
-    @Enumerated(EnumType.STRING) // se você estiver usando um Enum
-    private StatusGab status; // Status do GAB, pode ser utilizado para controle de fluxo
+
+    @Enumerated(EnumType.STRING)
+    private StatusGab status; // Status do GAB, para controle de fluxo
 
     @Column(name = "mensagem", columnDefinition = "TEXT", nullable = true) // Mensagem opcional
     private String mensagem;
@@ -53,7 +42,7 @@ public class Gab {
         return "Gab{" +
                 "id=" + id +
                 ", gabRequest=" + gabRequest +
-                ", user=" + user + // Adiciona a informação do User ao toString
+                ", user=" + user +
                 ", status=" + status +
                 ", mensagem='" + mensagem + '\'' +
                 ", pdfFile=" + (pdfFile != null ? "PDF file with size " + pdfFile.length : "No PDF file") +
