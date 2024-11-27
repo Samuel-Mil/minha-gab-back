@@ -3,11 +3,15 @@ package backendminhagab.example.MinhaGab.controller;
 import backendminhagab.example.MinhaGab.models.GabRequest;
 import backendminhagab.example.MinhaGab.models.UserModel;
 import backendminhagab.example.MinhaGab.services.GabRequestService;
+import backendminhagab.example.MinhaGab.services.GabService;
+import backendminhagab.example.MinhaGab.models.Gab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/gab_requests")
@@ -15,6 +19,9 @@ public class GabRequestController {
 
     @Autowired
     private final GabRequestService gabRequestService;
+
+    @Autowired
+    private GabService gabService;
 
     public GabRequestController(GabRequestService gabRequestService) {
         this.gabRequestService = gabRequestService;
@@ -53,6 +60,13 @@ public class GabRequestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao processar o upload: " + e.getMessage());
         }
+    }
+
+    //nao sei se e o certo de fato, mas irei deixar o endpoint para achar a gab relacionada ao nome/cpf aqui
+    @GetMapping("/search")
+    public ResponseEntity<List<Gab>> gabsByCpfOrName(@RequestParam String cpfOrName) {
+        List<Gab> gabs = gabService.getGabsCpfOrName(cpfOrName);
+        return ResponseEntity.ok(gabs);
     }
 
 }

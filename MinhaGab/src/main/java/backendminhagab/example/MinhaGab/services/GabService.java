@@ -88,4 +88,12 @@ public class GabService {
         gab.setPdfFile(file.getBytes());
         return gabRepository.save(gab);
     }
+
+    //Metodo para retornar Gabs relacionadas ao nome ou cpf de um certo usuario
+    public List<Gab> getGabsCpfOrName(String cpfOrName) {
+       if (cpfOrName.isEmpty() || cpfOrName == null) {
+            throw new GabNotFoundException("CPF/Name not found.");
+       }
+       return gabRepository.findByCpfOrName(cpfOrName);
+    }
 }
